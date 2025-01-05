@@ -215,10 +215,11 @@ bool CameraProvider::initialize() {
             return false;
         }
     }
-    std::vector<int> extraIDs = {
+    
 #ifdef EXTRA_IDS
+  std::vector<int> extraIDs = {
         EXTRA_IDS
-#endif
+
     };
     for (int i : extraIDs) {
         if (!initOneCamera(i)) {
@@ -228,7 +229,7 @@ bool CameraProvider::initialize() {
             mNumberOfLegacyCameras++;
         }
     }
-
+#endif
     return true;  // mInitFailed
 }
 
