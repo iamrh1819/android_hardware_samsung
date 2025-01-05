@@ -27,7 +27,9 @@ using ::aidl::android::hardware::camera::common::VendorTag;
 using ::android::hardware::camera::common::helper::VendorTagDescriptor;
 using ::android::hardware::camera::device::implementation::CameraDevice;
 using ::android::hardware::camera::device::implementation::fromStatus;
-
+// If true, if the extra_ids have a camera id that is not existent,
+// the hal will fail.
+constexpr bool kHardenCameraIdExistenceCheck = false;
 namespace {
 // "device@<version>/internal/<id>"
 const std::regex kDeviceNameRE("device@([0-9]+\\.[0-9]+)/internal/(.+)");
@@ -219,8 +221,13 @@ bool CameraProvider::initialize() {
 #ifdef EXTRA_IDS
   for (int i : {EXTRA_IDS}) {
         if (!initOneCamera(i)) {
-            mModule.clear();
-            return false;
+            if constexpr (!kHardenCameraIdExistenceCheck) {
+                ALOGW("%s: Camera ID %d is not actually available", __func__, i);
+                continue;
+            } else {
+                mModule.clear();
+                return false;
+            }
         } else {
             mNumberOfLegacyCameras++;
         }
