@@ -34,6 +34,9 @@ LOCAL_SHARED_LIBRARIES := \
     liblog \
     libutils
 
+LOCAL_REQUIRED_MODULES := \
+    libcrypto-v33
+
 LOCAL_MODULE := android.hardware.keymaster@4.0-service.samsung
 LOCAL_INIT_RC := android.hardware.keymaster@4.0-service.samsung.rc
 LOCAL_MODULE_RELATIVE_PATH := hw
