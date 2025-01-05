@@ -11,7 +11,13 @@ soong_config_module_type {
     value_variables: ["extra_ids"],
     properties: ["cppflags"],
 }
-
+soong_config_module_type {
+    name: "camera_32bit",
+    module_type: "cc_defaults",
+    config_namespace: "samsungCameraVars",
+    bool_variables: ["camera_32bit"],
+    properties: ["compile_multilib"],
+}
 extra_ids {
     name: "extra_id_defaults",
     soong_config_variables: {
@@ -20,10 +26,18 @@ extra_ids {
         },
     },
 }
-
+camera_32bit {
+    name: "camera_32bit_defaults",
+    soong_config_variables: {
+        camera_32bit: {
+            compile_multilib: "32",
+        },
+    },
+}
 cc_binary {
     name: "android.hardware.camera.provider-service.samsung",
     defaults: [
+        "camera_32bit_defaults",
         "extra_id_defaults",
         "samsung_camera3_defaults"
     ],
